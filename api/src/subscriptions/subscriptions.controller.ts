@@ -1,12 +1,23 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post, Res, Response } from '@nestjs/common';
 import { CreateSubscriptionDto } from './dto/create-subscription.dto.js';
+import { SubscriptionsService } from './subscriptions.service.js';
 
 @Controller('subscriptions')
 export class SubscriptionsController {
 
+    constructor(
+        private readonly subsService : SubscriptionsService
+    ){}
+
+    @HttpCode(HttpStatus.CREATED)
     @Post()
-    createSubscription(@Body() createSubscription : CreateSubscriptionDto) {
+    async createSubscription(@Body() createSubscription : CreateSubscriptionDto) {
+
+        const res = await this.subsService.createSubscription({...createSubscription});
+
+        console.log("in controller...")
         console.log(createSubscription);
+        return res
     }
 
 }

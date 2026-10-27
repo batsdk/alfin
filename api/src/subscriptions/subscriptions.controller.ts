@@ -13,7 +13,7 @@ export class SubscriptionsController {
     @Post()
     async createSubscription(@Body() createSubscription: CreateSubscriptionDto) {
 
-        const res = await this.subsService.createSubscription({ ...createSubscription });
+        const res = await this.subsService.createSubscription(createSubscription);
         console.log(createSubscription);
         return res
     }

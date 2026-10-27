@@ -11,7 +11,15 @@ export class DatabaseService implements Queryable, OnModuleDestroy {
 
     constructor(@InjectPinoLogger(DatabaseService.name) private readonly logger: PinoLogger) { }
 
-    private readonly pool = new Pool({ connectionString: process.env.DATABASE_URL, max: 10 });
+    private readonly pool = new Pool({
+        host: process.env.DB_HOST ?? "localhost",
+        port: Number(process.env.DB_PORT ?? 5432),
+        database: process.env.DB_NAME ?? "subscriptions_test",
+        user: process.env.DB_USER ?? "postgres",
+        password: process.env.DB_PASSWORD ?? "postgres",
+        max: 10,
+    });
+
 
     async query<T extends QueryResultRow = any>(text: string, params?: unknown[]): Promise<T[]> {
         const start = Date.now();

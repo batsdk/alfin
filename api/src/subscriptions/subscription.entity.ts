@@ -3,12 +3,13 @@ import { UUID } from "node:crypto";
 
 export interface Subscription {
     id: UUID;
-    userId: string;
-    name: string;
-    amount: number; // minor units
+    title: string;
+    price: number;
+    startDate: Date;
+    endDate: Date;
+    billingInterval: BillingInterval;
     currency: string;
-    interval: BillingInterval;
-    nextChargeAt: Date;
+    timezone: string;
 }
 
 export type NewSubscription = Omit<Subscription, 'id'>;

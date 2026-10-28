@@ -6,6 +6,7 @@ import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 import { SubscriptionsModule } from './subscriptions/subscriptions.module.js';
 import { DatabaseModule } from './database/database.module.js';
+import { ConfigModule } from '@nestjs/config';
 
 const isProd = process.env.NODE_ENV === 'production';
 
@@ -39,14 +40,19 @@ const isProd = process.env.NODE_ENV === 'production';
         // pretty in dev, raw JSON in prod
         transport: isProd
           ? undefined
-          : { target: 'pino-pretty', options: { singleLine: true, colorize: true } },
+          : {
+              target: 'pino-pretty',
+              options: { singleLine: true, colorize: true },
+            },
       },
     }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     SubscriptionsModule,
-    DatabaseModule
+    DatabaseModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-
-export class AppModule { }
+export class AppModule {}

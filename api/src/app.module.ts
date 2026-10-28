@@ -7,6 +7,7 @@ import { AppService } from './app.service.js';
 import { SubscriptionsModule } from './subscriptions/subscriptions.module.js';
 import { DatabaseModule } from './database/database.module.js';
 import { ConfigModule } from '@nestjs/config';
+import { CategoryModule } from './category/category.module.js';
 
 const isProd = process.env.NODE_ENV === 'production';
 
@@ -51,6 +52,7 @@ const isProd = process.env.NODE_ENV === 'production';
     }),
     SubscriptionsModule,
     DatabaseModule,
+    CategoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],

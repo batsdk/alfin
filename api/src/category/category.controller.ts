@@ -10,13 +10,19 @@ import {
 import { CategoryService } from './category.service.js';
 import { CreateCategoryDto } from './dto/create-category.dto.js';
 import { UpdateCategoryDto } from './dto/update-category.dto.js';
+import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 
 @Controller('category')
 export class CategoryController {
-  constructor(private readonly categoryService: CategoryService) {}
+  constructor(
+    @InjectPinoLogger(CategoryController.name)
+    private readonly logger: PinoLogger,
+    private readonly categoryService: CategoryService,
+  ) {}
 
   @Post()
   create(@Body() createCategoryDto: CreateCategoryDto) {
+    this.logger.info('Request recieved');
     return this.categoryService.create(createCategoryDto);
   }
 

@@ -2,12 +2,19 @@ import { Injectable } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto.js';
 import { UpdateCategoryDto } from './dto/update-category.dto.js';
 import { CategoryRepository } from './category.repository.ts';
+import { SubscriptionsService } from '@src/subscriptions/subscriptions.service.js';
+import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 
 @Injectable()
 export class CategoryService {
-  constructor(private readonly repo: CategoryRepository) {}
+  constructor(
+    @InjectPinoLogger(SubscriptionsService.name)
+    private readonly logger: PinoLogger,
+    private readonly repo: CategoryRepository,
+  ) {}
 
   async create(createCategoryDto: CreateCategoryDto) {
+    this.logger.info('Creating category in service');
     const res = await this.repo.createCategory({ ...createCategoryDto });
     return res;
   }

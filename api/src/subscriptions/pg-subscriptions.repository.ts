@@ -2,10 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { NewSubscription, Subscription } from './subscription.entity.ts';
 import { SubscriptionsRepository } from './subscriptions.repository.ts';
 import { DatabaseService } from '@src/database/database.service.js';
+import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
+import { SubscriptionsService } from './subscriptions.service.ts';
 
 @Injectable()
 export class PgSubscriptionsRepository extends SubscriptionsRepository {
-  constructor(private readonly database: DatabaseService) {
+  constructor(
+    @InjectPinoLogger(PgSubscriptionsRepository.name)
+    private readonly logger: PinoLogger,
+    private readonly database: DatabaseService,
+  ) {
     super();
   }
 
@@ -25,6 +31,7 @@ export class PgSubscriptionsRepository extends SubscriptionsRepository {
         description
     `;
 
+    this.logger.info(`creating subscription in repo : ${data}`);
     const rows = await this.database.query<Subscription>(
       `INSERT INTO subscriptions
        (title, price, currency, billing_interval, start_date, end_date, timezone, cycle, color, icon, description)

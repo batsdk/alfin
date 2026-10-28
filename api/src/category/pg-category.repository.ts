@@ -2,10 +2,16 @@ import { DatabaseService } from '@src/database/database.service.js';
 import { NewCategory, Category } from './category.entity.ts';
 import { CategoryRepository } from './category.repository.ts';
 import { Injectable } from '@nestjs/common';
+import { SubscriptionsService } from '@src/subscriptions/subscriptions.service.js';
+import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 
 @Injectable()
 export class PgCategoryRepository extends CategoryRepository {
-  constructor(private readonly database: DatabaseService) {
+  constructor(
+    @InjectPinoLogger(PgCategoryRepository.name)
+    private readonly logger: PinoLogger,
+    private readonly database: DatabaseService,
+  ) {
     super();
   }
 
@@ -16,6 +22,8 @@ export class PgCategoryRepository extends CategoryRepository {
         icon,
         color
     `;
+
+    this.logger.info(`creating category in the repo : ${data}`);
 
     const rows = await this.database.query<Category>(
       ` insert into categories

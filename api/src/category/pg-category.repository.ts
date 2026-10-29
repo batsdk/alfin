@@ -36,4 +36,12 @@ export class PgCategoryRepository extends CategoryRepository {
 
     return rows[0]!;
   }
+
+  async findAllCategories(): Promise<Array<Category>> {
+    const rows = await this.database.query<Category>(`
+      select id,title, icon, color from categories
+      `);
+
+    return rows;
+  }
 }

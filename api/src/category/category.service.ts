@@ -19,8 +19,10 @@ export class CategoryService {
     return res;
   }
 
-  findAll() {
-    return `This action returns all category`;
+  async findAll() {
+    this.logger.info('Getting all category in service');
+    const categories = await this.repo.findAllCategories();
+    return categories;
   }
 
   // findOne(id: number) {

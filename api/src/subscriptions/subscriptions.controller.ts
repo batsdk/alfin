@@ -35,9 +35,4 @@ export class SubscriptionsController {
     console.log(createSubscription);
     return res;
   }
-
-  @Get('test')
-  test() {
-    return 'ok';
-  }
 }

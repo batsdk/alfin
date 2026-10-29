@@ -31,6 +31,11 @@ export class CategoryController {
     return this.categoryService.findAll();
   }
 
+  @Get('test')
+  test() {
+    return 'ok';
+  }
+
   // @Get(':id')
   // findOne(@Param('id') id: string) {
   //   return this.categoryService.findOne(+id);

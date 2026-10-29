@@ -3,6 +3,7 @@ import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 import { CreateSubscriptionDto } from './dto/create-subscription.dto.js';
 import { SubscriptionsRepository } from './subscriptions.repository.js';
 import { BillingInterval } from '@src/contracts/subscriptions.types.js';
+import { Subscription } from './subscription.entity.ts';
 
 @Injectable()
 export class SubscriptionsService {
@@ -17,6 +18,11 @@ export class SubscriptionsService {
     const res = await this.repo.createSubscription({
       ...subs,
     });
+    return res;
+  }
+
+  async getSubscriptions(): Promise<Array<Subscription>> {
+    const res = await this.repo.getSubscriptions();
     return res;
   }
 }

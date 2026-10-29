@@ -1,11 +1,10 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
-  Res,
-  Response,
 } from '@nestjs/common';
 import { CreateSubscriptionDto } from './dto/create-subscription.dto.js';
 import { SubscriptionsService } from './subscriptions.service.js';
@@ -19,6 +18,15 @@ export class SubscriptionsController {
     private readonly subsService: SubscriptionsService,
   ) {}
 
+  @HttpCode(HttpStatus.OK)
+  @Get('all')
+  async getSubscriptions() {
+    this.logger.info('Getting All subs');
+    const result = await this.subsService.getSubscriptions();
+
+    return result;
+  }
+
   @HttpCode(HttpStatus.CREATED)
   @Post()
   async createSubscription(@Body() createSubscription: CreateSubscriptionDto) {
@@ -26,5 +34,10 @@ export class SubscriptionsController {
     const res = await this.subsService.createSubscription(createSubscription);
     console.log(createSubscription);
     return res;
+  }
+
+  @Get('test')
+  test() {
+    return 'ok';
   }
 }

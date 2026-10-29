@@ -8,8 +8,10 @@ import {
   IsOptional,
   IsString,
   IsTimeZone,
+  IsUUID,
 } from 'class-validator';
 import { BillingInterval } from '@src/contracts/index.js';
+import type { UUID } from 'node:crypto';
 
 export class CreateSubscriptionDto {
   @IsString()
@@ -74,4 +76,8 @@ export class CreateSubscriptionDto {
 
   @IsString()
   icon: string;
+
+  @IsOptional()
+  @IsUUID()
+  categoryId: UUID;
 }

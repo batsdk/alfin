@@ -33,27 +33,38 @@ export class PgSubscriptionsRepository extends SubscriptionsRepository {
     `;
 
     this.logger.info(`creating subscription in repo : ${data}`);
-    const rows = await this.database.query<Subscription>(
-      `INSERT INTO subscriptions
+
+    try {
+      const rows = await this.database.query<Subscription>(
+        `INSERT INTO subscriptions
        (title, price, currency, billing_interval, start_date, end_date, timezone, cycle, color, icon, description, category_id)
         VALUES ($1, $2, $3, $4, $5, $6, $7,$8,$9,$10,$11, $12)
         RETURNING ${COLUMNS}`,
-      [
-        data.title,
-        data.price,
-        data.currency,
-        data.billingInterval,
-        data.startDate,
-        data.endDate ?? null,
-        data.timezone ?? null,
-        data.cycle ?? null,
-        data.color ?? null,
-        data.icon ?? null,
-        data.description ?? null,
-        data.categoryId ?? null,
-      ],
-    );
-    return rows[0]!;
+        [
+          data.title,
+          data.price,
+          data.currency,
+          data.billingInterval,
+          data.startDate,
+          data.endDate ?? null,
+          data.timezone ?? null,
+          data.cycle ?? null,
+          data.color ?? null,
+          data.icon ?? null,
+          data.description ?? null,
+          data.categoryId ?? null,
+        ],
+      );
+      if (!rows[0]) {
+        throw new Error('Insert did not return a subscription');
+      }
+      return rows[0]!;
+    } catch (error) {
+      this.logger.error(
+        `error creating subscriptions : ${JSON.stringify(error)}`,
+      );
+      throw error;
+    }
   }
 
   async getSubscriptions(): Promise<Array<Subscription>> {

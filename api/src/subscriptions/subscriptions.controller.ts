@@ -9,6 +9,7 @@ import {
 import { CreateSubscriptionDto } from './dto/create-subscription.dto.js';
 import { SubscriptionsService } from './subscriptions.service.js';
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
+import { SubscriptionResponse } from './dto/subscription.response.ts';
 
 @Controller('subscriptions')
 export class SubscriptionsController {
@@ -23,16 +24,17 @@ export class SubscriptionsController {
   async getSubscriptions() {
     this.logger.info('Getting All subs');
     const result = await this.subsService.getSubscriptions();
-
     return result;
   }
 
-  @HttpCode(HttpStatus.CREATED)
   @Post()
   async createSubscription(@Body() createSubscription: CreateSubscriptionDto) {
     this.logger.info('Request recieved');
     const res = await this.subsService.createSubscription(createSubscription);
-    console.log(createSubscription);
-    return res;
+
+    return new SubscriptionResponse({
+      isSuccess: true,
+      subscription: res,
+    });
   }
 }

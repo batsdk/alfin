@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 import { CreateSubscriptionDto } from './dto/create-subscription.dto.js';
 import { SubscriptionsRepository } from './subscriptions.repository.js';
@@ -15,14 +15,27 @@ export class SubscriptionsService {
 
   async createSubscription(subs: CreateSubscriptionDto) {
     this.logger.info('Returning in Subscription Service');
-    const res = await this.repo.createSubscription({
-      ...subs,
-    });
-    return res;
+    try {
+      const res = await this.repo.createSubscription({
+        ...subs,
+      });
+      return res;
+    } catch (error) {
+      if (error instanceof Error && 'code' in error && error.code === '23503') {
+        throw new BadRequestException('The specified category does not exist.');
+      }
+      this.logger.error(`Error creating subscriptions: ${error}`);
+      throw error;
+    }
   }
 
   async getSubscriptions(): Promise<Array<Subscription>> {
-    const res = await this.repo.getSubscriptions();
-    return res;
+    try {
+      const res = await this.repo.getSubscriptions();
+      return res;
+    } catch (error) {
+      this.logger.error(`Error getting subscriptions: ${error}`);
+      throw error;
+    }
   }
 }

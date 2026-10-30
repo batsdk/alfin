@@ -13,11 +13,12 @@ export class SubscriptionsService {
     private readonly repo: SubscriptionsRepository,
   ) {}
 
-  async createSubscription(subs: CreateSubscriptionDto) {
+  async createSubscription(subs: CreateSubscriptionDto, userId: string) {
     this.logger.info('Returning in Subscription Service');
     try {
       const res = await this.repo.createSubscription({
         ...subs,
+        userId,
       });
       return res;
     } catch (error) {

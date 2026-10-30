@@ -10,6 +10,7 @@ import { CreateSubscriptionDto } from './dto/create-subscription.dto.js';
 import { SubscriptionsService } from './subscriptions.service.js';
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 import { SubscriptionResponse } from './dto/subscription.response.ts';
+import { CurrentUserId } from '@src/auth/current-user-id.decorator.js';
 
 @Controller('subscriptions')
 export class SubscriptionsController {
@@ -20,7 +21,7 @@ export class SubscriptionsController {
   ) {}
 
   @HttpCode(HttpStatus.OK)
-  @Get('all')
+  @Get()
   async getSubscriptions() {
     this.logger.info('Getting All subs');
     const result = await this.subsService.getSubscriptions();
@@ -28,9 +29,12 @@ export class SubscriptionsController {
   }
 
   @Post()
-  async createSubscription(@Body() createSubscription: CreateSubscriptionDto) {
+  async createSubscription(
+    @Body() createSubscription: CreateSubscriptionDto,
+    @CurrentUserId() userId: string,
+  ) {
     this.logger.info('Request recieved');
-    const res = await this.subsService.createSubscription(createSubscription);
+    const res = await this.subsService.createSubscription(createSubscription, userId);
 
     return new SubscriptionResponse({
       isSuccess: true,

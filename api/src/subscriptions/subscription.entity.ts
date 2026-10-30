@@ -15,6 +15,7 @@ export interface Subscription {
   description: string;
   icon?: string;
   categoryId?: UUID;
+  userId: string;
 }
 
 export type NewSubscription = Omit<Subscription, 'id'>;

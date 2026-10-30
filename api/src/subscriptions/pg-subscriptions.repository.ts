@@ -29,7 +29,8 @@ export class PgSubscriptionsRepository extends SubscriptionsRepository {
         color,
         icon,
         description,
-        category_id      AS "categoryId"
+        category_id      AS "categoryId",
+        user_id          AS "userId"
     `;
 
     this.logger.info(`creating subscription in repo : ${data}`);
@@ -37,8 +38,8 @@ export class PgSubscriptionsRepository extends SubscriptionsRepository {
     try {
       const rows = await this.database.query<Subscription>(
         `INSERT INTO subscriptions
-       (title, price, currency, billing_interval, start_date, end_date, timezone, cycle, color, icon, description, category_id)
-        VALUES ($1, $2, $3, $4, $5, $6, $7,$8,$9,$10,$11, $12)
+       (title, price, currency, billing_interval, start_date, end_date, timezone, cycle, color, icon, description, category_id, user_id)
+        VALUES ($1, $2, $3, $4, $5, $6, $7,$8,$9,$10,$11, $12, $13)
         RETURNING ${COLUMNS}`,
         [
           data.title,
@@ -53,6 +54,7 @@ export class PgSubscriptionsRepository extends SubscriptionsRepository {
           data.icon ?? null,
           data.description ?? null,
           data.categoryId ?? null,
+          data.userId,
         ],
       );
       if (!rows[0]) {

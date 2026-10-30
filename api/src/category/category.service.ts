@@ -19,9 +19,9 @@ export class CategoryService {
     return res;
   }
 
-  async findAll() {
+  async findAll(userId: string) {
     this.logger.info('Getting all category in service');
-    const categories = await this.repo.findAllCategories();
+    const categories = await this.repo.findAllCategories(userId);
     return categories;
   }
 

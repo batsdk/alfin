@@ -1,9 +1,11 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
+  Param,
   Post,
 } from '@nestjs/common';
 import { CreateSubscriptionDto } from './dto/create-subscription.dto.js';
@@ -34,20 +36,25 @@ export class SubscriptionsController {
     @CurrentUserId() userId: string,
   ) {
     this.logger.info('Request recieved');
-    const res = await this.subsService.createSubscription(createSubscription, userId);
+    const res = await this.subsService.createSubscription(
+      createSubscription,
+      userId,
+    );
 
     return new SubscriptionResponse({
       isSuccess: true,
       subscription: res,
     });
-
-    //  @Get()
-    //   list(@CurrentUserId() userId: string) {
-    //     return this.service.list(userId);
-    //   }
-
-    // create(@Session() session: UserSession, @Body() dto: CreateSubscriptionDto) {
-    //   return this.service.createSubscription(session.user.id, dto);
-    // }
   }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async deleteSubscription(@Param('id') subId: string, @CurrentUserId() userId: string,) {
+    this.logger.info(`Request recieved to delete the subscription : ${subId}, user : ${userId}`);
+    const res = await this.subsService.deleteSubscription(subId, userId);
+  }
+
+  // create(@Session() session: UserSession, @Body() dto: CreateSubscriptionDto) {
+  //   return this.service.createSubscription(session.user.id, dto);
+  // }
 }

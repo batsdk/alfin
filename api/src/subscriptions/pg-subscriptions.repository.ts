@@ -86,10 +86,25 @@ export class PgSubscriptionsRepository extends SubscriptionsRepository {
         category_id      AS "categoryId"
     `;
 
-    const rows = await this.database.query<Subscription>(`
+    const rows = await this.database.query<Subscription>(
+      `
       select ${COLUMNS} from subscriptions where user_id = $1
-      `, [userId]);
+      `,
+      [userId],
+    );
 
     return rows;
+  }
+
+  async deleteSubscriptionById( subId: string, userId: string): Promise<string> {
+    const result = await this.database.query(
+      `
+      DELETE FROM subscriptions
+      WHERE id = $1 AND user_id = $2
+      RETURNING id
+    `,
+      [subId, userId],
+    );
+    return result[0]
   }
 }

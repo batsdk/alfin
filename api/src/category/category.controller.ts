@@ -25,8 +25,8 @@ export class CategoryController {
   }
 
   @Get()
-  findAll() {
-    return this.categoryService.findAll();
+  findAll(@CurrentUserId() userId: string) {
+    return this.categoryService.findAll(userId);
   }
 
   @Get('test')

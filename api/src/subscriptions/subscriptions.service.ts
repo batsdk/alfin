@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 import { CreateSubscriptionDto } from './dto/create-subscription.dto.js';
 import { SubscriptionsRepository } from './subscriptions.repository.js';
@@ -36,6 +36,19 @@ export class SubscriptionsService {
       return res;
     } catch (error) {
       this.logger.error(`Error getting subscriptions: ${error}`);
+      throw error;
+    }
+  }
+
+  async deleteSubscription(subscriptionId: string, userId: string){
+    this.logger.info('Deleting subscription in service')
+    try {
+      const findSub = await this.repo.deleteSubscriptionById(subscriptionId, userId);
+      if (!findSub ){
+        throw new NotFoundException(`Subscription with ID ${subscriptionId} was not found`)
+      }
+    } catch (error) {
+      this.logger.error(`Error deleting subs : ${error}`)
       throw error;
     }
   }

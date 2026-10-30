@@ -30,9 +30,9 @@ export class SubscriptionsService {
     }
   }
 
-  async getSubscriptions(): Promise<Array<Subscription>> {
+  async getSubscriptions(userId: string): Promise<Array<Subscription>> {
     try {
-      const res = await this.repo.getSubscriptions();
+      const res = await this.repo.getSubscriptions(userId);
       return res;
     } catch (error) {
       this.logger.error(`Error getting subscriptions: ${error}`);

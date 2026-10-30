@@ -22,9 +22,9 @@ export class SubscriptionsController {
 
   @HttpCode(HttpStatus.OK)
   @Get()
-  async getSubscriptions() {
+  async getSubscriptions(@CurrentUserId() userId: string) {
     this.logger.info('Getting All subs');
-    const result = await this.subsService.getSubscriptions();
+    const result = await this.subsService.getSubscriptions(userId);
     return result;
   }
 

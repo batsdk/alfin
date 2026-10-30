@@ -69,7 +69,7 @@ export class PgSubscriptionsRepository extends SubscriptionsRepository {
     }
   }
 
-  async getSubscriptions(): Promise<Array<Subscription>> {
+  async getSubscriptions(userId: string): Promise<Array<Subscription>> {
     const COLUMNS = `
         id,
         title,
@@ -87,8 +87,8 @@ export class PgSubscriptionsRepository extends SubscriptionsRepository {
     `;
 
     const rows = await this.database.query<Subscription>(`
-      select ${COLUMNS} from subscriptions
-      `);
+      select ${COLUMNS} from subscriptions where user_id = $1
+      `, [userId]);
 
     return rows;
   }

@@ -13,9 +13,9 @@ export class CategoryService {
     private readonly repo: CategoryRepository,
   ) {}
 
-  async create(createCategoryDto: CreateCategoryDto) {
+  async create(createCategoryDto: CreateCategoryDto, userId: string) {
     this.logger.info('Creating category in service');
-    const res = await this.repo.createCategory({ ...createCategoryDto });
+    const res = await this.repo.createCategory({ ...createCategoryDto, userId });
     return res;
   }
 

@@ -3,14 +3,12 @@ import {
   Get,
   Post,
   Body,
-  Patch,
-  Param,
-  Delete,
 } from '@nestjs/common';
 import { CategoryService } from './category.service.js';
 import { CreateCategoryDto } from './dto/create-category.dto.js';
 import { UpdateCategoryDto } from './dto/update-category.dto.js';
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
+import { CurrentUserId } from '@src/auth/current-user-id.decorator.js';
 
 @Controller('category')
 export class CategoryController {
@@ -21,9 +19,9 @@ export class CategoryController {
   ) {}
 
   @Post()
-  create(@Body() createCategoryDto: CreateCategoryDto) {
+  create(@Body() createCategoryDto: CreateCategoryDto, @CurrentUserId() userId: string) {
     this.logger.info('Request recieved');
-    return this.categoryService.create(createCategoryDto);
+    return this.categoryService.create(createCategoryDto, userId);
   }
 
   @Get()

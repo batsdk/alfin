@@ -2,7 +2,6 @@ import { DatabaseService } from '@src/database/database.service.js';
 import { NewCategory, Category } from './category.entity.ts';
 import { CategoryRepository } from './category.repository.ts';
 import { Injectable } from '@nestjs/common';
-import { SubscriptionsService } from '@src/subscriptions/subscriptions.service.js';
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 
 @Injectable()
@@ -27,20 +26,20 @@ export class PgCategoryRepository extends CategoryRepository {
 
     const rows = await this.database.query<Category>(
       ` insert into categories
-        (title, icon, color)
-        values ($1, $2, $3)
+        (title, icon, color, user_id)
+        values ($1, $2, $3, $4)
         returning ${COLUMNS}
         `,
-      [data.title, data.icon, data.color],
+      [data.title, data.icon, data.color, data.userId],
     );
 
     return rows[0]!;
   }
 
-  async findAllCategories(): Promise<Array<Category>> {
+  async findAllCategories(userId: string): Promise<Array<Category>> {
     const rows = await this.database.query<Category>(`
-      select id,title, icon, color from categories
-      `);
+      select id,title, icon, color from categories where user_id is null or user_id = $1
+      `, [userId]);
 
     return rows;
   }

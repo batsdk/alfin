@@ -37,7 +37,7 @@ export default function SubscriptionsPage() {
       <ul>
         {subs.map((s) => (
           <li key={s.id}>
-            {s.title}: {(s.price / 100).toFixed(2)} {s.currency}
+            {s.title}: {(s.price).toFixed(2)} {s.currency}
           </li>
         ))}
       </ul>

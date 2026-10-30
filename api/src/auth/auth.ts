@@ -10,4 +10,8 @@ export const auth = betterAuth({
   trustedOrigins: [process.env.WEB_ORIGIN!],
   emailAndPassword: { enabled: true, minPasswordLength: 10 },
   plugins: [bearer()], // lets mobile/API clients send Authorization: Bearer <token>
+  session: {
+    expiresIn: 60 * 60 * 24 * 14, // 14 days, in seconds
+    updateAge: 60 * 60 * 24, // push the expiry forward at most once a day while the user is active
+  },
 });

@@ -36,5 +36,14 @@ export class SubscriptionsController {
       isSuccess: true,
       subscription: res,
     });
+
+    //  @Get()
+    //   list(@CurrentUserId() userId: string) {
+    //     return this.service.list(userId);
+    //   }
+
+    // create(@Session() session: UserSession, @Body() dto: CreateSubscriptionDto) {
+    //   return this.service.createSubscription(session.user.id, dto);
+    // }
   }
 }

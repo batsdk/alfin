@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+
 import { AuthModule } from '@thallesp/nestjs-better-auth';
 import { LoggerModule } from 'nestjs-pino';
 import { randomUUID } from 'node:crypto';
@@ -10,6 +12,7 @@ import { SubscriptionsModule } from './subscriptions/subscriptions.module.js';
 import { DatabaseModule } from './database/database.module.js';
 import { CategoryModule } from './category/category.module.js';
 import { auth } from './auth/auth.ts';
+import { UserIdInterceptor } from './auth/user-id.interceptor.ts';
 
 const isProd = process.env.NODE_ENV === 'production';
 
@@ -58,6 +61,9 @@ const isProd = process.env.NODE_ENV === 'production';
     CategoryModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    { provide: APP_INTERCEPTOR, useClass: UserIdInterceptor },
+  ],
 })
 export class AppModule {}

@@ -1,4 +1,6 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from '@thallesp/nestjs-better-auth';
 import { LoggerModule } from 'nestjs-pino';
 import { randomUUID } from 'node:crypto';
 
@@ -6,8 +8,8 @@ import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 import { SubscriptionsModule } from './subscriptions/subscriptions.module.js';
 import { DatabaseModule } from './database/database.module.js';
-import { ConfigModule } from '@nestjs/config';
 import { CategoryModule } from './category/category.module.js';
+import { auth } from './auth/auth.ts';
 
 const isProd = process.env.NODE_ENV === 'production';
 
@@ -50,6 +52,7 @@ const isProd = process.env.NODE_ENV === 'production';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    AuthModule.forRoot({ auth }),
     SubscriptionsModule,
     DatabaseModule,
     CategoryModule,

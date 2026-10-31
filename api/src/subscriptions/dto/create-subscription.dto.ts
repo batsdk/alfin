@@ -1,5 +1,6 @@
 import { Transform } from 'class-transformer';
 import {
+  IsBoolean,
   IsEnum,
   IsISO8601,
   isISO8601,
@@ -33,7 +34,7 @@ export class CreateSubscriptionDto {
     }
     return new Date(value);
   })
-  @IsNotEmpty()
+  @IsOptional()
   startDate: Date;
 
   @Transform(({ value }) => {
@@ -80,4 +81,7 @@ export class CreateSubscriptionDto {
   @IsOptional()
   @IsUUID()
   categoryId: UUID;
+
+  @IsBoolean()
+  isReminder: boolean;
 }

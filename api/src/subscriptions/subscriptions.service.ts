@@ -16,6 +16,7 @@ export class SubscriptionsService {
   async createSubscription(subs: CreateSubscriptionDto, userId: string) {
     this.logger.info('Returning in Subscription Service');
     try {
+      if(!subs.startDate) subs.startDate = new Date();
       const res = await this.repo.createSubscription({
         ...subs,
         userId,
